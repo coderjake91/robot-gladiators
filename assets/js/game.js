@@ -1,3 +1,13 @@
+/*
+*Pseudocode comments
+
+**Game states
+"WIN" - Player robot has defeated all enemy-robots
+    * Fight all enemy-robots
+    * Defeat each enemy-robot
+"LOSE" - Player robot's health is zero or less
+*/
+
 //initalize player-robot game variables
 var playerName = window.prompt("What is your robot's name?");
 var playerHealth = 100;
@@ -5,7 +15,7 @@ var playerAttack = 10;
 var playerMoney = 10;
 
 //initalize enemy-robot game variables
-var enemyName = "Roborto";
+var enemyNames = ["Roborto", "Amy Android", "Robo Trumble"];
 var enemyHealth = 50;
 var enemyAttack = 12;
 
@@ -13,7 +23,7 @@ var enemyAttack = 12;
 console.log(playerName, playerHealth, playerAttack);
 
 //create "fight" function
-var fight = function(){
+var fight = function(enemyName){
     //alter players that round is starting
     window.alert("Welcome to Robot Gladiators!");
 
@@ -63,4 +73,7 @@ var fight = function(){
     }
 };
 
-fight();
+//iterate across enemyNames array to enable fighting multiple robots feature
+for(var i =0; i < enemyNames.length; i++){
+    fight(enemyNames[i]);
+}
