@@ -78,7 +78,20 @@ var fight = function(enemyName){
 
 //iterate across enemyNames array to enable fighting multiple robots feature
 for(var i =0; i < enemyNames.length; i++){
-    var pickedEnemyName = enemyNames[i];
-    enemyHealth = 50;
-    fight(pickedEnemyName);
+    if(playerHealth > 0){
+        //inform player of a new round
+        window.alert("Welcome to Robot Gladiators! Round " + (i + 1));
+
+        //pick enemy-robot
+        var pickedEnemyName = enemyNames[i];
+
+        //reset enemyHealth each time a new robot is faught
+        enemyHealth = 50;
+
+        //initiate fight with new enemy robot name passed to fight function assuming the enemyName parameter value
+        fight(pickedEnemyName);
+    } else {
+        window.alert("You have lost your robot in battle! GAME OVER!");
+        break;
+    }
 }
