@@ -37,8 +37,8 @@ var fight = function(enemyName){
             var confirmSkip = window.confirm("Are you sure you really want to quit this battle?");
 
             if(confirmSkip){
-                //if player skips, deduct player money, leave fight
-                playerMoney = playerMoney - 10;
+                //if player skips, deduct player money, leave fight with a minimum credit value of zero
+                playerMoney = Math.max(0, playerMoney - 10);
                 window.alert(playerName + " has chosen to skip the fight!");
                 console.log("playerMoney", playerMoney);
                 break;
@@ -46,8 +46,9 @@ var fight = function(enemyName){
         }
         //check if the player chooses 'FIGHT' or 'fight
         if(promptFight === "FIGHT" || promptFight === "fight"){
-            //player-robot attacks enemy-robot, then log enemyHealth
-            enemyHealth = enemyHealth - playerAttack;
+            //player-robot attacks enemy-robot using randomized damage, then log enemyHealth with a max value of zero
+            var damage = randomNumber(playerAttack - 3, playerAttack);
+            enemyHealth = Math.max(0, enemyHealth - damage);
             console.log(playerName + " attacked! " + enemyName + " health is now: " + enemyHealth);
 
             //check enemy's health
@@ -58,8 +59,9 @@ var fight = function(enemyName){
                 window.alert(enemyName + " still has " + enemyHealth + " health left.");
             }
 
-            //enemy-robot attacks player-robot, then log playerHealth
-            playerHealth = playerHealth - enemyAttack;
+            //enemy-robot attacks player-robot, then log playerHealth with a max value of zero
+            var damage = randomNumber(enemyAttack - 3, enemyAttack);
+            playerHealth = Math.max(0, playerHealth - damage);
             console.log(enemyName + " attacked! " + playerName + "'s health is now: " + playerHealth);
 
             //check player health
@@ -93,8 +95,8 @@ var startGame = function(){
             //pick enemy-robot
             var pickedEnemyName = enemyNames[i];
 
-            //reset enemyHealth each time a new robot is faught
-            enemyHealth = 50;
+            //reset enemyHealth to a random number between 40 - 60, each time a new robot is faught
+            enemyHealth = randomNumber(40, 60);
 
             //initiate fight with new enemy robot name passed to fight function assuming the enemyName parameter value
             fight(pickedEnemyName);
@@ -186,6 +188,13 @@ var shop = function() {
             shop();
             break;
     }
+};
+
+//random number generator function expression that returns whole number values between parameters min - max
+var randomNumber = function(min, max){
+    var value = Math.floor(Math.random() * (max - min + 1) + min);
+
+    return value;
 };
 
 //start the game when the page loads
