@@ -160,9 +160,23 @@ var randomNumber = function(min, max){
     return value;
 };
 
+var getPlayerName = function(){
+    var name = "";
+    name = window.prompt("Welcome to Robot Gladiators! What is your robot's name?");
+
+    //loop until a valid robot name is entered by player, i.e. not "null" or ""
+    while(name === "" || name === null){
+        window.alert("You have not entered a valid name. Please enter a valid name and continue.")
+        name = window.prompt("What is your robot's name?");
+    }
+
+    console.log("Your robot's name is " + name);
+    return name;
+};
+
 //player info object to initialize player name and robot properties
 var playerInfo = {
-    name: window.prompt("What is your robot's name?"),
+    name: getPlayerName(),
     health: 100,
     attack: 10,
     money: 10,
