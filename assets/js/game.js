@@ -8,57 +8,85 @@
 "LOSE" - Player robot's health is zero or less
 */
 
+//fight or skip function prompts player for fight or skip response and checks for valid input, else re-prompts player
+var fightOrSkip = function(){
+    //prompt the user if they want to fight robots, display input to console
+    var promptFight = window.prompt("Would you like to FIGHT or SKIP this battle? Enter 'FIGHT' or 'SKIP' to choose.");
+    console.log(promptFight);
+
+    //user input verification, check for null/"", then convert input to lower case, check if player wants to skip(confirm), fight, or check for other invalid input (words other than fight)
+    switch(promptFight){
+        case "":
+        case null:
+            //no valid input presented by player, alert player of invalid input then recursively call fightOrSkip again
+            window.alert("The player has entered and invalid response. Please proceed with a valid option...");
+            return fightOrSkip();
+            break;
+        default:
+            promptFight = promptFight.toLowerCase();
+
+            //check if player wants to skip fight
+            switch(promptFight){
+                case "skip":
+                    //confirm player wants to skip
+                    var confirmSkip = window.confirm("Are you sure you really want to quit this battle?");
+
+                    if(confirmSkip){
+                        //if player skips, deduct player money, leave fight with a minimum credit value of zero
+                        playerInfo.money = Math.max(0, playerInfo.money - 10);
+                        window.alert(playerInfo.name + " has chosen to skip the fight!");
+                        console.log("playerInfo.money", playerInfo.money);
+            
+                        //return true if player wants to leave the fight
+                        return true;
+                    }
+                    break;
+                case "fight":
+                    //return false if the player wants to continue fighting
+                    return false;
+                    break;
+                default:
+                    //no valid input presented by player, alert player of invalid input then recursively call fightOrSkip again
+                    window.alert("The player has entered and invalid response. Please proceed with a valid option...");
+                    return fightOrSkip();
+                    break;
+            }
+            break;
+    }
+}
+
 //create "fight" function
 var fight = function(enemy){
     //repeat fight sequence as long as enemy-robot is alive
     while(enemy.health > 0 && playerInfo.health > 0){
-        //prompt the user if they want to fight robots, display input to console
-        var promptFight = window.prompt("Would you like to FIGHT or SKIP this battle? Enter 'FIGHT' or 'SKIP' to choose.");
-        console.log(promptFight);
-
-        //check if player wants to skip fight
-        if(promptFight === "SKIP" || promptFight === 'skip'){
-            //confirm player wants to skip
-            var confirmSkip = window.confirm("Are you sure you really want to quit this battle?");
-
-            if(confirmSkip){
-                //if player skips, deduct player money, leave fight with a minimum credit value of zero
-                playerInfo.money = Math.max(0, playerInfo.money - 10);
-                window.alert(playerInfo.name + " has chosen to skip the fight!");
-                console.log("playerInfo.money", playerInfo.money);
-                break;
-            }
+        //prompt player if they want to fight or skip
+        if(fightOrSkip()){
+            //breaks if player wants to leave fight->returned boolean from fightOrSkip
+            break;
         }
-        //check if the player chooses 'FIGHT' or 'fight
-        if(promptFight === "FIGHT" || promptFight === "fight"){
-            //player-robot attacks enemy-robot using randomized damage, then log enemy health with a max value of zero
-            var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
-            enemy.health = Math.max(0, enemy.health - damage);
-            console.log(playerInfo.name + " attacked! " + enemy.name + " health is now: " + enemy.health);
+        
+        var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
+        enemy.health = Math.max(0, enemy.health - damage);
+        console.log(playerInfo.name + " attacked! " + enemy.name + " health is now: " + enemy.health);
 
-            //check enemy's health
-            if(enemy.health <= 0){
-                window.alert(enemy.name + " has died!");
-                break;
-            } else {
-                window.alert(enemy.name + " still has " + enemy.health + " health left.");
-            }
-
-            //enemy-robot attacks player-robot, then log playerInfo.health with a max value of zero
-            var damage = randomNumber(enemy.attack - 3, enemy.attack);
-            playerInfo.health = Math.max(0, playerInfo.health - damage);
-            console.log(enemy.name + " attacked! " + playerInfo.name + "'s health is now: " + playerInfo.health);
-
-            //check player health
-            if(playerInfo.health <= 0){
-                window.alert(playerInfo.name + " has died");
-                break;
-            } else {
-                window.alert(playerInfo.name + " still has " + playerInfo.health + " health left.");
-            }
+        //check enemy's health
+        if(enemy.health <= 0){
+            window.alert(enemy.name + " has died!");
+            break;
         } else {
-            //else, no valid input presented by player, alert player of invalid input
-            window.alert("The player has entered and invalid response. Please proceed with a valid option...");
+            window.alert(enemy.name + " still has " + enemy.health + " health left.");
+        }
+        //enemy-robot attacks player-robot, then log playerInfo.health with a max value of zero
+        var damage = randomNumber(enemy.attack - 3, enemy.attack);
+        playerInfo.health = Math.max(0, playerInfo.health - damage);
+        console.log(enemy.name + " attacked! " + playerInfo.name + "'s health is now: " + playerInfo.health);
+
+        //check player health
+        if(playerInfo.health <= 0){
+            window.alert(playerInfo.name + " has died");
+            break;
+        } else {
+            window.alert(playerInfo.name + " still has " + playerInfo.health + " health left.");
         }
     }
 };
@@ -160,6 +188,7 @@ var randomNumber = function(min, max){
     return value;
 };
 
+//prompt for player's robot name, and re-prompt until input is not null or empty string
 var getPlayerName = function(){
     var name = "";
     name = window.prompt("Welcome to Robot Gladiators! What is your robot's name?");
