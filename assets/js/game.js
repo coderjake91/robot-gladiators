@@ -156,6 +156,29 @@ var endGame = function() {
     //if the player is still alive, player wins
     if(playerInfo.health > 0){
         window.alert("Great job, you've survived the game! You now have a score of " + playerInfo.money + ".");
+
+        //retrieve current highscore from localStorage and compare player-robot score with current hightscore
+        var currentScore = parseInt(localStorage.getItem("highScore"));
+        console.log(currentScore);
+        var currentChampion = localStorage.getItem("champ");
+        if(currentScore > playerInfo.money){
+            //if current highscore is higher, then send player a message that they did not beat the highscore
+            window.alert("The current Robot Gladiator champion is " + currentChampion + " with a high score of " + currentScore + ", please try again next time to defeat the current champion!");
+        }
+
+        if(currentScore < playerInfo.money){
+            //if player score is higher, then send the player a message that they beat the high score, then set new highscore and name into localStorage
+            window.alert(playerInfo.name + " has defeated the current Robot Gladiator champion, " + currentChampion + ", with a new high score of " + playerInfo.money + ", compared to a previous score of " + currentScore + "!!!!!");
+            localStorage.setItem("champ", playerInfo.name);
+            localStorage.setItem("highScore", playerInfo.money);
+        }
+
+        if(currentScore === playerInfo.money) {
+            //else, the player has tied the current highscore, then send the player a message that they have tied the current high score
+            window.alert("The current Robot Gladiator champion has been tied by, " + playerInfo.name + ". Please play again to try and defeat " + currentChampion + ".");
+        }
+    
+        
     } else {
         window.alert("You've lost your robot in battle.");
     }
@@ -224,12 +247,12 @@ var getPlayerName = function(){
 //player info object to initialize player name and robot properties
 var playerInfo = {
     name: getPlayerName(),
-    health: 100,
+    health: 150,
     attack: 10,
-    money: 10,
+    money: 200,
     reset: function(){
-        this.health = 100;
-        this.money = 10;
+        this.health = 150;
+        this.money = 200;
         this.attack = 10;
     },
     refillHealth: function(){
