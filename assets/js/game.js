@@ -154,20 +154,18 @@ var endGame = function() {
 //shop function expression declaration- allow players to enter the shop as part of a game feature
 var shop = function() {
     //ask player to choose between refilling health, upgrading attack, or leaving the shop
-    var shopOptionPrompt = window.prompt("Would you like to REFILL your health, UPGRADE your attack, or LEAVE the shop? Please enter one: 'REFILL', 'UPGRADE', or 'LEAVE' to make a choice.");
-
+    var shopOptionPrompt = window.prompt("Would you like to REFILL your health, UPGRADE your attack, or LEAVE the shop? Please enter one of the following numbers (1-3): 1 = REFILL, 2 = UPGRADE, or 3 = LEAVE to make a choice.");
+    //convert
+    shopOptionPrompt = parseInt(shopOptionPrompt);
     //implement switch to handle user choice
     switch(shopOptionPrompt){
-        case "REFILL":
-        case "refill":
+        case 1:
             playerInfo.refillHealth();
             break;
-        case "UPGRADE":
-        case "upgrade":
+        case 2:
             playerInfo.upgradeAttack();
             break;
-        case "LEAVE":
-        case "leave":
+        case 3:
             //leave code
             window.alert("Leaving the shop.");
             break;
