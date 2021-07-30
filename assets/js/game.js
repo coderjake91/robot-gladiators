@@ -57,37 +57,57 @@ var fightOrSkip = function(){
 
 //create "fight" function
 var fight = function(enemy){
-    //repeat fight sequence as long as enemy-robot is alive
-    while(enemy.health > 0 && playerInfo.health > 0){
+    //variable to keep track of fight 'turns'
+    var isPlayerTurn = true;
+    //variable keeps track of player round skip choice
+    var skip = false;
+
+    //uses math.random() to simulate a coin-flip to determine robot fighter 'turn'
+    if(Math.random() > 0.5){
+        isPlayerTurn = false;
+    }
+
+    //repeat fight sequence as long as enemy-robot and player are alive + player has not chose to skip round
+    while(enemy.health > 0 && playerInfo.health > 0 && !skip){
         //prompt player if they want to fight or skip
-        if(fightOrSkip()){
-            //breaks if player wants to leave fight->returned boolean from fightOrSkip
-            break;
-        }
-        
-        var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
-        enemy.health = Math.max(0, enemy.health - damage);
-        console.log(playerInfo.name + " attacked! " + enemy.name + " health is now: " + enemy.health);
+        switch(isPlayerTurn){
+            case true:
+                if(fightOrSkip()){
+                    //breaks if player wants to leave fight->returned boolean from fightOrSkip
+                    skip = true;
+                    break;
+                }
+                var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
+                enemy.health = Math.max(0, enemy.health - damage);
+                console.log(playerInfo.name + " attacked! " + enemy.name + " health is now: " + enemy.health);
 
-        //check enemy's health
-        if(enemy.health <= 0){
-            window.alert(enemy.name + " has died!");
+                //check enemy's health
+                if(enemy.health <= 0){
+                    window.alert(enemy.name + " has died!");
+                    break;
+                } else {
+                    window.alert(enemy.name + " still has " + enemy.health + " health left.");
+                }
             break;
-        } else {
-            window.alert(enemy.name + " still has " + enemy.health + " health left.");
-        }
-        //enemy-robot attacks player-robot, then log playerInfo.health with a max value of zero
-        var damage = randomNumber(enemy.attack - 3, enemy.attack);
-        playerInfo.health = Math.max(0, playerInfo.health - damage);
-        console.log(enemy.name + " attacked! " + playerInfo.name + "'s health is now: " + playerInfo.health);
+            case false:
+                //enemy-robot attacks player-robot, then log playerInfo.health with a max value of zero
+                var damage = randomNumber(enemy.attack - 3, enemy.attack);
+                playerInfo.health = Math.max(0, playerInfo.health - damage);
+                console.log(enemy.name + " attacked! " + playerInfo.name + "'s health is now: " + playerInfo.health);
 
-        //check player health
-        if(playerInfo.health <= 0){
-            window.alert(playerInfo.name + " has died");
+                //check player health
+                if(playerInfo.health <= 0){
+                    window.alert(playerInfo.name + " has died");
+                    break;
+                } else {
+                    window.alert(playerInfo.name + " still has " + playerInfo.health + " health left.");
+                }
             break;
-        } else {
-            window.alert(playerInfo.name + " still has " + playerInfo.health + " health left.");
+            default:
+            break;
         }
+        //switch fighter turn
+        isPlayerTurn = !isPlayerTurn;
     }
 };
 
